@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
-using Microsoft.ServiceFabric.Actors;
+using Microsoft.AspNetCore.Mvc;
 using QLearningServiceFab.Actors.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,12 +8,13 @@ using QLearningServiceFab.Actors.Interfaces;
 namespace QAPI.Controllers
 {
     [Route("api/[controller]")]
-    public class QTrainerController : Controller
+    [ApiController]
+    public class QTrainerController : ControllerBase
     {
         // GET: api/values
         [HttpGet()]
         [Route("[action]/{startTrans:int}")]
-        public  async Task<IActionResult>  Start(int startTrans)
+        public async Task<IActionResult> Start(int startTrans)
         {
             try
             {
@@ -31,7 +31,6 @@ namespace QAPI.Controllers
             }
         }
 
-        
         [HttpGet()]
         [Route("[action]/{stateToken}")]
         public async Task<int> NextValue(int stateToken)
@@ -42,6 +41,5 @@ namespace QAPI.Controllers
 
             return qs[new Random().Next(0, qs.Count)];
         }
-
     }
 }
