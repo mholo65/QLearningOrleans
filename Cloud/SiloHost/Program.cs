@@ -19,13 +19,15 @@ namespace SiloHost
                 {
                     builder
                         .UseLocalhostClustering()
+                        .AddMemoryGrainStorage("DevStore")
                         .Configure<ClusterOptions>(options =>
                         {
                             options.ClusterId = "dev";
-                            options.ServiceId = "HelloWorldApp";
+                            options.ServiceId = "QLearningOrleans";
                         })
                         .Configure<EndpointOptions>(options => options.AdvertisedIPAddress = IPAddress.Loopback)
-                        .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(QState).Assembly).WithReferences());
+                        .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(QState).Assembly).WithReferences())
+                        .UseDashboard();
                 })
                 .ConfigureServices(services =>
                 {

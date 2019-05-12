@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Orleans;
+using Orleans.Providers;
 using QLearningOrleans.Interfaces;
 
 namespace QLearningOrleans.Grains
 {
+    [StorageProvider(ProviderName="DevStore")]
     public class QTrainedState : Grain<QTrainedStateState>, IQTrainedState
     {
         public Task AddChildQTrainedStateAsync(int stateToken, double reward)

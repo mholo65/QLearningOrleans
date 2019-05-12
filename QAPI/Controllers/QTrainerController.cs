@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using QLearningServiceFab.Actors.Interfaces;
-
-// For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+using Orleans;
+using QLearningOrleans.Interfaces;
 
 namespace QAPI.Controllers
 {
@@ -11,6 +10,13 @@ namespace QAPI.Controllers
     [ApiController]
     public class QTrainerController : ControllerBase
     {
+        private readonly IClusterClient _client;
+
+        public QTrainerController(IClusterClient client)
+        {
+            _client = client;
+        }
+
         // GET: api/values
         [HttpGet()]
         [Route("[action]/{startTrans:int}")]
@@ -18,15 +24,14 @@ namespace QAPI.Controllers
         {
             try
             {
-                var actor = ActorProxy.Create<IQState>(ActorId.NewId(), "fabric:/QLearningServiceFab/");
+                var grain = _client.GetGrain<IQState>(Guid.NewGuid());
 
-                await actor.StartTrainingAsync(startTrans);
+                await grain.StartTrainingAsync(startTrans);
 
                 return Ok(startTrans);
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
@@ -35,9 +40,9 @@ namespace QAPI.Controllers
         [Route("[action]/{stateToken}")]
         public async Task<int> NextValue(int stateToken)
         {
-            var actor = ActorProxy.Create<IQTrainedState>(new ActorId(stateToken), "fabric:/QLearningServiceFab");
+            var grain = _client.GetGrain<IQTrainedState>(stateToken);
 
-            var qs = await actor.GetChildrenQTrainedStatesAsync();
+            var qs = await grain.GetChildrenQTrainedStatesAsync();
 
             return qs[new Random().Next(0, qs.Count)];
         }

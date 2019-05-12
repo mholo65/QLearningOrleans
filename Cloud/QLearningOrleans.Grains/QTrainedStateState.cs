@@ -10,6 +10,6 @@ namespace QLearningOrleans.Grains
         public double MaximumReward { get; set; }
 
         [DataMember]
-        public HashSet<int> ChildrenQTrainedStates { get; set; }
+        public ISet<int> ChildrenQTrainedStates { get; } = new HashSet<int>();
     }
 }

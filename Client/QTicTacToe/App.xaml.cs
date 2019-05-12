@@ -23,7 +23,7 @@ namespace QTicTacToe
     sealed partial class App : Application
     {
         //TODO: Set the server and port where the service is running 
-        public static Uri QServiceUrl = new Uri("http://<YOUR SERVER>:<PORT>/api/qtrainer/nextvalue/");
+        public static Uri QServiceUrl = new Uri("https://localhost:5001/api/qtrainer/nextvalue/");
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
